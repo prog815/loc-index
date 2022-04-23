@@ -1,0 +1,1 @@
+find /var/files -type f > /var/prog/files.txt

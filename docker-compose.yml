@@ -5,6 +5,8 @@ services:
     image: php:7.4-fpm
     volumes:
       - './src:/var/www/html'
+      - './files:/var/files:ro'
+      - './scan.sh:/var/prog/scan.sh'
 
   nginx:
     image: nginx:latest
@@ -33,4 +35,5 @@ services:
     ports:
      - "8082:80"
     environment:
-      PMA_HOST: mysql      
+      PMA_HOST: mysql   
+      MYSQL_USER: ${MYSQL_USER}
