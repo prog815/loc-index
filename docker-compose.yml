@@ -24,7 +24,9 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/schema.sql
       - ./files:/var/files:ro
-      - ./scan.sh:/var/prog/scan.sh
+      - ./scan.sh:/var/prog/scan.sh:ro
+      - ./create_temp.sql:/var/prog/create_temp.sql:ro
+      - ./replace.sql:/var/prog/replace.sql:ro
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
