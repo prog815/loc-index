@@ -16,7 +16,6 @@ cd loc-index/
 Запускаем контейнер.
 ```
 docker-compose up -d
-docker-compose exec mysql bash /var/prog/init.sh
 ```
 
 # Работа с программой
