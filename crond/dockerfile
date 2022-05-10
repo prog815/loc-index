@@ -1,0 +1,13 @@
+FROM alpine
+
+RUN apk add --no-cache mysql-client
+
+COPY ./create_temp.sql /root/create_temp.sql
+COPY ./replace.sql /root/replace.sql
+
+COPY ./scan.sh /root/scan.sh
+RUN chmod +x /root/scan.sh
+
+RUN crontab -l | { cat; echo "* * * * * /root/scan.sh > /root/scan.log 2>&1"; } | crontab -
+
+CMD [ "/usr/sbin/crond", "-f", "-d8" ]

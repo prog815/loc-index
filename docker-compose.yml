@@ -5,8 +5,20 @@ services:
     image: php:7.4-fpm
     volumes:
       - './src:/var/www/html'
-      - './files:/var/files:ro'
-      
+      # - './files:/var/files:ro'
+
+  crond:
+    build: /crond  
+    restart: unless-stopped
+    volumes:
+      - ./files:/var/files:ro  
+    depends_on: 
+      - mysql
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: loc-poisk
 
   nginx:
     image: nginx:latest
@@ -16,17 +28,17 @@ services:
       - './src:/var/www/html'
       - './nginx.conf:/etc/nginx/conf.d/default.conf'
       
-
   mysql:
+    # build: /mysql
+    # container_name: mysql
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
+    # command: ["apt-get", "install","-y","cron"]
+    # command: ["cron","-f"]
     restart: unless-stopped
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/schema.sql
-      - ./files:/var/files:ro
-      - ./scan.sh:/var/prog/scan.sh:ro
-      - ./create_temp.sql:/var/prog/create_temp.sql:ro
-      - ./replace.sql:/var/prog/replace.sql:ro
+      # - ./files:/var/files:ro
+      - ./init.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
@@ -34,11 +46,3 @@ services:
       MYSQL_DATABASE: loc-poisk
     ports:
       - '3306:3306'
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    ports:
-     - "8082:80"
-    environment:
-      PMA_HOST: mysql   
-      MYSQL_USER: ${MYSQL_USER}
