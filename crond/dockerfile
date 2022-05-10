@@ -2,9 +2,6 @@ FROM alpine
 
 RUN apk add --no-cache mysql-client
 
-COPY ./create_temp.sql /root/create_temp.sql
-COPY ./replace.sql /root/replace.sql
-
 COPY ./scan.sh /root/scan.sh
 RUN chmod +x /root/scan.sh
 
