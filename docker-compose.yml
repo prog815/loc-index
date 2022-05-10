@@ -8,6 +8,10 @@ services:
       - './src:/var/www/html'
     depends_on: 
       - mysql
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: loc-poisk
       
   crond:
     build: /crond  
@@ -18,7 +22,6 @@ services:
       - mysql
     environment:
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: loc-poisk
 

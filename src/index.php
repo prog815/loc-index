@@ -11,7 +11,7 @@
 
 echo "привет всем" ;
 
-$link = mysqli_connect('mysql', 'user', 'mypassword','loc-poisk') or die('Не удалось соединиться: ' . mysqli_error()) ;
+$link = mysqli_connect('mysql', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'),getenv('MYSQL_DATABASE')) or die('Не удалось соединиться: ' . mysqli_error()) ;
 
 // mysql_select_db('loc-poisk') or die('Не удалось выбрать базу данных') ;
 
