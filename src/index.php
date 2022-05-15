@@ -7,23 +7,43 @@
     <title>Document</title>
 </head>
 <body>
+
+
+    <?php
+        $search = isset($_GET["search"]) ? $_GET["search"] : "" ;
+        
+     ?>
+
+    <form action="index.php">
+        <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>">
+        <input type="submit" value="искать">
+    </form>
+
     <?php 
 
-echo "привет всем" ;
+// echo "привет всем" ;
 
 $link = mysqli_connect('mysql', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'),getenv('MYSQL_DATABASE')) or die('Не удалось соединиться: ' . mysqli_error()) ;
 
 // mysql_select_db('loc-poisk') or die('Не удалось выбрать базу данных') ;
 
-$query = 'SELECT * FROM files';
+$where = trim(mysqli_real_escape_string($link,$search)) ;
+if(!empty($where))
+{
+    $where = preg_replace('/[\s\t ]+/i',"%' AND path LIKE '%",$where) ;
+    $where = " WHERE path LIKE '%{$where}%'" ;
+    // echo $where ;
+}
+
+$query = "SELECT path FROM files{$where}";
 $result = mysqli_query($link,$query) or die('Запрос не удался: ' . mysqli_error()) ;
 
 echo "<table>\n";
-while ($line = mysqli_fetch_array($result)) {
+while ($row = mysqli_fetch_array($result)) {
     echo "\t<tr>\n";
-    foreach ($line as $col_value) {
-        echo "\t\t<td>$col_value</td>\n";
-    }
+    
+    echo "\t\t<td>$row[0]</td>\n";
+
     echo "\t</tr>\n";
 }
 echo "</table>\n";
